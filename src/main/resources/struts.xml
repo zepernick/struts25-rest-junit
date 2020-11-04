@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+
+
+    <!-- allow rest and non rest actions to live together -->
+    <constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.PrefixBasedActionMapper" />
+    <constant name="struts.mapper.prefixMapping" value="/grid:struts,/reports:struts,/error:struts,:rest"/>
+    <constant name="struts.rest.namespace" value="/" />
+    <constant name="struts.rest.validationFailureStatusCode" value="200" />
+
+    <constant name="struts.convention.action.suffix" value="Action"/>
+    <constant name="struts.convention.action.mapAllMatches" value="true"/>
+    <constant name="struts.convention.package.locators.basePackage" value="com.zepernick.actions" />
+    <!-- IWS-1073 added to satisfy the convention plugin (dependency of the rest plugin) for the purpose of
+     unit testing configuration. -->
+    <constant name="struts.convention.result.path" value="/com/zepernick/actions" />
+
+    <!--re-assert the extensions for struts that have been over written by the rest plugin-->
+    <constant name="struts.action.extension" value="xhtml,,json,action"/>
+    <constant name="struts.rest.content.restrictToGET" value="false" />
+
+    <!--configure Convention Plugin to find our controllers-->
+    <constant name="struts.convention.default.parent.package" value="zepernick-default"/>
+
+    <!-- Spring Configuration -->
+    <constant name="struts.objectFactory.spring.autoWire" value="no" />
+
+    <!-- Look for file named messages.properties -->
+    <constant name="struts.custom.i18n.resources" value="messages" />
+
+
+    <package name="zepernick-default" extends="rest-default, struts-default">
+
+        <interceptors>
+
+            <interceptor-stack name="zepernick-default-stack">
+                <interceptor-ref name="restDefaultStack">
+                    <param name="exception.logEnabled">true</param>
+                    <param name="exception.logLevel">ERROR</param>
+                    <param name="restWorkflow.excludeMethods">input,back,cancel,browse,index,show,editNew,edit</param>
+                    <param name="validation.excludeMethods">input,back,cancel,browse,index,show,editNew,edit</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+
+        <default-interceptor-ref name="zepernick-default-stack" />
+        <default-action-ref name="index" />
+
+        <action name="index">
+            <result type="redirectAction">
+                <param name="actionName">my-test</param>
+                <param name="namespace">/test</param>
+            </result>
+        </action>
+
+
+    </package>
+
+
+</struts>

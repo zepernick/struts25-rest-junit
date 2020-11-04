@@ -1,0 +1,17 @@
+# HealthSmart standard .gitignore
+
+# Target, Out, Artifacts directories
+
+**/target/
+**/out/
+**/artifacts/
+
+# IDE configuration
+**/.idea/
+*.iml
+
+# Exclude node_modules
+**/node_modules/
+**/npm-debug.log
+
+*.jasper
